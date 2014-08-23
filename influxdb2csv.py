@@ -2,7 +2,6 @@
 
 import urllib
 import argparse
-import influxdb
 import json
 import sys
 
@@ -46,21 +45,24 @@ def fetchResult(url):
 def translateResult(jsonData):
     cols = jsonData[0]["columns"]
     points = jsonData[0]["points"]
-    
+
     finalAns = ""
     for col in cols:
         finalAns = finalAns + "\"" + col + "\","
-    finalAns = finalAns[:-1] + "\n"
+    finalAns = finalAns[:-1]
+    print finalAns
 
     for point in points:
+        finalAns = ""
         for index in point:
             if type(index) is int:
                 finalAns += str(index) + ","
+            elif type(index) is float:
+                finalAns += str(index) + ","
             else:
                 finalAns += "\"" + index + "\"" + ","
-        finalAns = finalAns[:-1] + "\n"
-
-    print finalAns
+        finalAns = finalAns[:-1] 
+        print finalAns
 
 def main():
     parserArgs = parseArguments()
